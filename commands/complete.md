@@ -26,7 +26,7 @@ Identifier: $ARGUMENTS
 ```
 
 Use the Task tool with:
-- `subagent_type`: `todo-manager`
+- `subagent_type`: `todo:todo-manager`
 - `model`: `haiku` (for efficiency)
 
 ## Syntax Examples
