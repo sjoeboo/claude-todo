@@ -13,8 +13,16 @@ A TODO management plugin for Claude Code. Track tasks with priorities and tags i
 ## Installation
 
 ```bash
-# From GitHub directly
-claude plugins install https://github.com/sjoeboo/claude-todo
+# Step 1: Add the marketplace
+claude plugins add-marketplace sjoeboo/claude-todo
+
+# Step 2: Install the plugin
+claude plugins install todo@claude-todo
+```
+
+Or if you prefer a one-liner using the GitHub URL:
+```bash
+claude plugins add-marketplace https://github.com/sjoeboo/claude-todo && claude plugins install todo@claude-todo
 ```
 
 ## Commands
@@ -113,6 +121,7 @@ The `/todo:do` command provides a full workflow:
 ```
 claude-todo/
 ├── .claude-plugin/
+│   ├── marketplace.json  # Marketplace definition (for distribution)
 │   └── plugin.json       # Plugin manifest
 ├── agents/
 │   └── todo-manager.md   # Haiku subagent for CRUD operations

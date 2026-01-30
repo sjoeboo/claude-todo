@@ -1,0 +1,19 @@
+{
+  "name": "claude-todo",
+  "owner": {
+    "name": "sjoeboo",
+    "url": "https://github.com/sjoeboo"
+  },
+  "metadata": {
+    "description": "TODO management plugin for Claude Code",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "todo",
+      "description": "TODO management with priorities, tags, and archiving. Uses Haiku subagent for context-efficient CRUD operations.",
+      "source": "./",
+      "version": "1.1.0"
+    }
+  ]
+}
