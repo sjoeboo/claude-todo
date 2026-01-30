@@ -12,17 +12,12 @@ A TODO management plugin for Claude Code. Track tasks with priorities and tags i
 
 ## Installation
 
-```bash
-# Step 1: Add the marketplace
-claude plugins add-marketplace sjoeboo/claude-todo
+In a Claude Code session, run these commands:
 
-# Step 2: Install the plugin
-claude plugins install todo@claude-todo
 ```
+/plugins marketplace add sjoeboo/claude-todo
 
-Or if you prefer a one-liner using the GitHub URL:
-```bash
-claude plugins add-marketplace https://github.com/sjoeboo/claude-todo && claude plugins install todo@claude-todo
+/plugins install todo@claude-todo
 ```
 
 ## Commands
