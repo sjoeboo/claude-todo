@@ -1,0 +1,19 @@
+{
+  "name": "todo",
+  "description": "TODO management with priorities, tags, and archiving. Uses Haiku subagent for context-efficient CRUD operations.",
+  "version": "1.1.0",
+  "author": {
+    "name": "sjoeboo",
+    "url": "https://github.com/sjoeboo"
+  },
+  "repository": "https://github.com/sjoeboo/claude-todo",
+  "license": "MIT",
+  "keywords": [
+    "todo",
+    "task-management",
+    "productivity",
+    "workflow",
+    "priorities",
+    "tags"
+  ]
+}
