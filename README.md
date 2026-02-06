@@ -1,148 +1,70 @@
 # claude-todo
 
-A TODO management plugin for Claude Code. Track tasks with priorities and tags in a `TODO.md` file, with completed items archived to `DONE.md`.
+Track TODOs as GitHub Issues with automatic project board integration.
 
 ## Features
 
-- **Priority levels**: `!!!` (critical), `!!` (medium), `!` (low)
-- **Tags**: `[backend]`, `[auth]`, etc. for categorization
-- **Archive**: Completed tasks preserved in `DONE.md` with timestamps
-- **Context-efficient**: Uses Haiku subagent for CRUD operations, keeping main context clean
-- **Integrated workflow**: `/todo:do` leverages Claude's planning for task execution
+- **GitHub Issues backend** - All TODOs stored in `ghe.spotify.net/mnicholson/claude-todos`
+- **Project board** - Visual kanban at `ghe.spotify.net/users/mnicholson/projects/1`
+- **Auto-tracking** - Natural language triggers issue creation/completion
+- **Project context** - Auto-detects current repo for filtering
 
 ## Installation
 
-In a Claude Code session, run these commands:
-
 ```
 /plugins marketplace add sjoeboo/claude-todo
-
 /plugins install todo@claude-todo
 ```
 
-## Commands
-
-| Command | Description |
-|---------|-------------|
-| `/todo:add <task>` | Add a new TODO item (with optional priority/tags) |
-| `/todo:list [tag]` | Show all TODO items (optionally filter by tag) |
-| `/todo:complete <item>` | Mark as done and archive to DONE.md |
-| `/todo:remove <item>` | Remove without archiving |
-| `/todo:do <item>` | Work on a TODO (plan → execute → complete) |
-| `/todo:help` | Show help for all commands |
-
 ## Usage
 
-### Adding Tasks with Priority & Tags
+### Slash Command
 
 ```
-/todo:add Implement user authentication
-/todo:add !!! Fix critical security bug
-/todo:add !! [backend] Add rate limiting
-/todo:add [frontend][a11y] Improve keyboard navigation
+/todo add Fix the login bug
+/todo list
+/todo complete 5
+/todo start 3
 ```
 
-### Priority Levels
+### Natural Language
 
-| Marker | Level | Use Case |
-|--------|-------|----------|
-| `!!!` | Critical | Security issues, blocking bugs |
-| `!!` | Medium | Important features, reviews |
-| `!` | Low | Nice-to-haves, docs |
-| (none) | Normal | Regular tasks |
+The `work-tracker` skill responds to natural phrases:
 
-### Viewing Tasks
+- "add a todo for X" → creates issue
+- "what are my todos" → lists issues
+- "mark #5 as done" → closes issue
+- "start working on #3" → moves to In Progress
 
+### Auto-Tracking
+
+When you ask Claude to implement/fix something, it can automatically:
+1. Create an issue for the work
+2. Move to In Progress when starting
+3. Close when complete
+
+## Board Columns
+
+| Column | Trigger |
+|--------|---------|
+| Todo | Issue created |
+| In Progress | `/todo start N` |
+| Blocked | `/todo block N` |
+| Done | `/todo complete N` |
+
+## Configuration
+
+Required in `~/.claude/settings.json`:
+
+```json
+{
+  "env": {
+    "GH_HOST": "ghe.spotify.net",
+    "CLAUDE_TODO_REPO": "mnicholson/claude-todos",
+    "CLAUDE_TODO_PROJECT": "1"
+  }
+}
 ```
-/todo:list              # Show all tasks (sorted by priority)
-/todo:list backend      # Show only [backend] tagged tasks
-```
-
-Output:
-```
-📋 TODO (5 pending)
-═══════════════════════════════════════
-
-Critical (2):
-  1. !!! [auth] Fix security vulnerability
-  2. !!! Deploy hotfix
-
-Medium (1):
-  3. !! [backend] Add rate limiting
-
-Normal (2):
-  4. [frontend] Update button styles
-  5. Write documentation
-
-───────────────────────────────────────
-Tags: auth(1), backend(1), frontend(1)
-```
-
-### Completing Tasks
-
-Tasks can be referenced by number or text match:
-
-```
-/todo:complete 1        # Complete task #1
-/todo:complete auth     # Complete task containing "auth"
-```
-
-Completed tasks are archived to `DONE.md`:
-```markdown
-# Completed
-
-- [x] 2026-01-30: !!! [auth] Fix security vulnerability
-- [x] 2026-01-29: Write unit tests
-```
-
-### Working on Tasks
-
-The `/todo:do` command provides a full workflow:
-
-1. Selects the task
-2. Explores the codebase for context
-3. Enters plan mode to design implementation
-4. Asks clarifying questions if needed
-5. Executes the plan after approval
-6. Archives the task to DONE.md
-
-```
-/todo:do 1
-/todo:do auth
-```
-
-## Architecture
-
-```
-claude-todo/
-├── .claude-plugin/
-│   ├── marketplace.json  # Marketplace definition (for distribution)
-│   └── plugin.json       # Plugin manifest
-├── agents/
-│   └── todo-manager.md   # Haiku subagent for CRUD operations
-├── commands/
-│   ├── add.md            # /todo:add
-│   ├── list.md           # /todo:list
-│   ├── complete.md       # /todo:complete
-│   ├── remove.md         # /todo:remove
-│   ├── do.md             # /todo:do (full workflow)
-│   └── help.md           # /todo:help
-├── LICENSE
-└── README.md
-```
-
-### Why a Subagent?
-
-The CRUD commands (`add`, `list`, `complete`, `remove`) delegate to a Haiku-powered subagent. This keeps the main conversation context clean for complex work while still providing quick task management.
-
-## Storage
-
-| File | Purpose |
-|------|---------|
-| `TODO.md` | Active tasks in current directory |
-| `DONE.md` | Archived completed tasks with timestamps |
-
-Both files use simple markdown checkbox format that's portable and human-readable.
 
 ## License
 
